@@ -3,6 +3,7 @@
 ToolsDong adalah aplikasi CLI berbasis Python untuk analisis jaringan Wi-Fi, pemindaian sinyal secara real-time, dan manajemen profil Wi-Fi tersimpan.
 
 ## 🚀 Fitur Utama
+- **System Resource Monitoring**: Monitor resource system anda seperti CPU, RAM, GPU, dan top program by RAM.
 - **Scan Wi-Fi Sekitar**: Menampilkan SSID, MAC Address (BSSID), Channel, Keamanan, dan Indikator Sinyal.
 - **Lihat Password Tersimpan**: Membaca profil Wi-Fi beserta password yang pernah terhubung di perangkat.
 - **Dukungan Lintas Platform**: Kompatibel dengan Windows dan Linux (`nmcli`).
