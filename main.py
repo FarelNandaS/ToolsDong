@@ -1,0 +1,75 @@
+import os
+import sys
+import time
+from rich.console import Console
+from rich.panel import Panel
+from rich.prompt import Prompt
+
+# Import modul tool dari folder tools
+from tools import sysmon, wifi_tools
+
+console = Console()
+
+LOGO_ART = r"""[bold green]
+  _______ ____   ____  _     _____ _____   ____  _   _  _____ 
+ |__   __/ __ \ / __ \| |   / ____|  __ \ / __ \| \ | |/ ____|
+    | | | |  | | |  | | |  | (___ | |  | | |  | |  \| | |  __ 
+    | | | |  | | |  | | |   \___ \| |  | | |  | | . ` | | |_ |
+    | | | |__| | |__| | |_______) | |__| | |__| | |\  | |__| |
+    |_|  \____/ \____/|_____|_____/|_____/\____/|_| \_|\_____|
+[/bold green]"""
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def flush_input_buffer():
+    try:
+        if os.name == 'nt':  # Windows
+            import msvcrt
+            while msvcrt.kbhit():
+                msvcrt.getch()
+        else:  # Linux / macOS
+            import termios
+            import sys
+            termios.tcflush(sys.stdin, termios.TCIFLUSH)
+    except Exception:
+        pass
+
+def exit_app():
+    clear_screen()
+    console.print("[bold green]Terima kasih telah menggunakan ToolsDong![/bold green]")
+    sys.exit(0)
+
+def main():
+    try:
+        while True:
+            clear_screen()
+
+            console.print(LOGO_ART)
+            
+            # Tampilan Banner Menu Utama ToolsDong
+            menu_text = (
+                "[bold cyan]1. System Resource Monitor[/bold cyan]\n"
+                "[bold cyan]2. Wi-Fi Scanner & Password Manager[/bold cyan]\n"
+                "[bold red]0. Keluar[/bold red]"
+            )
+            console.print(Panel(menu_text, title="[bold green]MAIN MENU[/bold green]", expand=False))
+
+            flush_input_buffer()
+            
+            pilihan = Prompt.ask("Pilih menu")
+            
+            if pilihan == "1":
+                sysmon.run()
+            elif pilihan == "2":
+                wifi_tools.run()
+            elif pilihan in ["0"]:
+                exit_app()
+            else :
+                console.print("\n[bold red]Kode yang anda masukan salah")
+                time.sleep(1)
+    except KeyboardInterrupt:
+        exit_app()
+
+if __name__ == "__main__":
+    main()
