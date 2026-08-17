@@ -6,6 +6,7 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.layout import Layout
 
+from utils import clear_screen
 
 def build_system_table() -> Table:
     cpu_usage = psutil.cpu_percent(interval=None)
@@ -93,7 +94,7 @@ def make_layout() -> Layout:
 def run():
     console = Console()
     psutil.cpu_percent(interval=None)
-    console.clear()
+    clear_screen()
     
     console.print("[bold green]System Resource Monitor Aktif.[/bold green]")
     console.print("[yellow]Tekan Ctrl+C untuk menghentikan monitor dan kembali ke Menu Utama ToolsDong...[/yellow]\n")
@@ -106,6 +107,6 @@ def run():
                 time.sleep(1)
                 live.update(make_layout())
     except KeyboardInterrupt:
-        console.clear()
-        console.print("[bold yellow]Kembali ke menu utama ToolsDong...[/bold yellow]")
+        clear_screen()
+        console.print("[bold yellow][!] Keluar Dari System Resource Monitor... Kembali ke Menu Utama.[/bold yellow]")
         time.sleep(1)

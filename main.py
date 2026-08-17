@@ -5,22 +5,16 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Prompt
 
-# Import modul tool dari folder tools
-from tools import sysmon, wifi_tools
+from utils import clear_screen
+from tools import sysmon, wifi_tools, info_gether
 
 console = Console()
 
 LOGO_ART = r"""[bold green]
-  _______ ____   ____  _     _____ _____   ____  _   _  _____ 
- |__   __/ __ \ / __ \| |   / ____|  __ \ / __ \| \ | |/ ____|
-    | | | |  | | |  | | |  | (___ | |  | | |  | |  \| | |  __ 
-    | | | |  | | |  | | |   \___ \| |  | | |  | | . ` | | |_ |
-    | | | |__| | |__| | |_______) | |__| | |__| | |\  | |__| |
-    |_|  \____/ \____/|_____|_____/|_____/\____/|_| \_|\_____|
+█▀█▀█ █▀█ █▀█ █   █▀▀ █▀▄ █▀█ █▄ █ █▀▀
+  █   █ █ █ █ █   ▀▀█ █ █ █ █ █ ▀█ █ █
+  ▀   ▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀ ▀▀  ▀▀▀ ▀  ▀ ▀▀▀
 [/bold green]"""
-
-def clear_screen():
-    os.system('cls' if os.name == 'nt' else 'clear')
 
 def flush_input_buffer():
     try:
@@ -51,6 +45,7 @@ def main():
             menu_text = (
                 "[bold cyan]1. System Resource Monitor[/bold cyan]\n"
                 "[bold cyan]2. Wi-Fi Scanner & Password Manager[/bold cyan]\n"
+                "[bold cyan]3. Information Gethering[/bold cyan]\n"
                 "[bold red]0. Keluar[/bold red]"
             )
             console.print(Panel(menu_text, title="[bold green]MAIN MENU[/bold green]", expand=False))
@@ -63,6 +58,8 @@ def main():
                 sysmon.run()
             elif pilihan == "2":
                 wifi_tools.run()
+            elif pilihan == "3":
+                info_gether.run()
             elif pilihan in ["0"]:
                 exit_app()
             else :

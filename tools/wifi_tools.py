@@ -1,11 +1,14 @@
 import os
 import sys
+import time
 import re
 import subprocess
 from rich.console import Console
 from rich.table import Table
 from rich.prompt import Prompt
 from rich.progress_bar import ProgressBar
+
+from utils import clear_screen
 
 console = Console()
 
@@ -183,7 +186,7 @@ def get_wifi_profiles():
 def run():
     try:
         while True:
-            console.clear()
+            clear_screen()
             console.print("[bold cyan]🔍 Memindai jaringan Wi-Fi sekitar & detail signal...[/bold cyan]\n")
 
             if os.name == "nt":
@@ -191,7 +194,7 @@ def run():
             else:
                 networks = scan_nearby_wifi_linux()
 
-            console.clear()
+            clear_screen()
 
             if not networks:
                 console.print("[yellow]Tidak ada jaringan Wi-Fi terditeksi atau Wi-Fi adapter mati.[/yellow]")
@@ -230,13 +233,13 @@ def run():
                 continue
             elif pilihan == "2":
                 try:
-                    console.clear()
+                    clear_screen()
 
                     console.print("[bold cyan]🔍 Memindai profil Wi-Fi tersimpan di perangkat...[/bold cyan]")
 
                     profiles = get_wifi_profiles()
 
-                    console.clear()
+                    clear_screen()
 
                     if not profiles:
                         console.print("[yellow]Tidak ditemukan profile Wi-Fi tersimpan atau akses dibatasi.[/yellow]")
@@ -257,3 +260,4 @@ def run():
                 break
     except KeyboardInterrupt:
         console.print("\n[bold yellow]\n[!] Keluar dari Wi-Fi Tools... Kembali ke Menu Utama.[/bold yellow]")
+        time.sleep(1)
