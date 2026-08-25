@@ -45,9 +45,9 @@ def run():
         try:
             clear_screen()
 
-            console.print("[bold green]Information Gethering[/bold green]")
+            console.print("[bold green]=== Information Gethering ===[/bold green]")
             console.print("[bold yellow]Tekan Ctrl+C untuk kembali ke menu utama ToolsDong...[/bold yellow]")
-            domain = console.input("[bold yellow]Masukan domain: [/bold yellow]")
+            domain = console.input("[bold yellow]Masukan domain (contoh: example.com): [/bold yellow]")
 
             if not domain:
                 continue
