@@ -6,7 +6,7 @@ from rich.panel import Panel
 from rich.prompt import Prompt
 
 from utils import clear_screen
-from tools import sysmon, wifi_tools, info_gether, vuln_check
+from tools import sysmon, vuln_scan, wifi_tools, info_gether
 
 console = Console()
 
@@ -46,7 +46,7 @@ def main():
                 "[bold cyan]1. System Resource Monitor[/bold cyan]\n"
                 "[bold cyan]2. Wi-Fi Scanner & Password Manager[/bold cyan]\n"
                 "[bold cyan]3. Information Gethering[/bold cyan]\n"
-                "[bold cyan]4. Vulnerable Check[/bold cyan]\n"
+                "[bold cyan]4. Vulnerable Scanner[/bold cyan]\n"
                 "[bold red]0. Keluar[/bold red]"
             )
             console.print(Panel(menu_text, title="[bold green]MAIN MENU[/bold green]", expand=False))
@@ -62,7 +62,7 @@ def main():
             elif pilihan == "3":
                 info_gether.run()
             elif pilihan == "4":
-                vuln_check.run()
+                vuln_scan.run()
             elif pilihan in ["0"]:
                 exit_app()
             else :
