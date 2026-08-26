@@ -205,6 +205,6 @@ def run():
             console.print("\n[bold green]✔ Pemindaian Selesai![/bold green]")
             Prompt.ask("Tekan Enter untuk kembali...")
         except KeyboardInterrupt:
-            console.print("\n[bold yellow][!] Keluar Dari Vulnerable Check... Kembali ke Menu Utama.[/bold yellow]")
+            console.print("\n[bold yellow][!] Keluar Dari Vulnerable Scan... Kembali ke Menu Utama.[/bold yellow]")
             time.sleep(1)
             break
