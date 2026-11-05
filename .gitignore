@@ -18,3 +18,8 @@ __pycache__/
 # OS Generated Files
 .DS_Store
 Thumbs.db
+
+build/
+dist/
+*.spec
+*.pyc
